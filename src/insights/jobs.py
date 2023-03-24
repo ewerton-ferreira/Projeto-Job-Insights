@@ -11,37 +11,13 @@ def read(path: str) -> List[Dict]:
         data = list(csv.DictReader(file))
     return data
 
-    """Reads a file from a given path and returns its contents
-
-    Parameters
-    ----------
-    path : str
-        Full path to file
-
-    Returns
-    -------
-    list
-        List of rows as dicts
-    """
-    raise NotImplementedError
-
 
 def get_unique_job_types(path: str) -> List[str]:
-    """Checks all different job types and returns a list of them
-
-    Must call `read`
-
-    Parameters
-    ----------
-    path : str
-        Must be passed to `read`
-
-    Returns
-    -------
-    list
-        List of unique job types
-    """
-    raise NotImplementedError
+    file = read(path)
+    job_types = set()
+    for row in file:
+        job_types.add(row['job_type'])
+    return list(job_types)
 
 
 def filter_by_job_type(jobs: List[Dict], job_type: str) -> List[Dict]:
