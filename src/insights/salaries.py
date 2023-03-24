@@ -1,7 +1,16 @@
 from typing import Union, List, Dict
+from src.insights.jobs import read
 
 
 def get_max_salary(path: str) -> int:
+    file = read(path)
+    salary_max = 0
+    for job in file:
+        if job['max_salary'].isdigit():
+            if int(job['max_salary']) > salary_max:
+                salary_max = int(job['max_salary'])
+
+    return salary_max
     """Get the maximum salary of all jobs
 
     Must call `read`
@@ -20,6 +29,14 @@ def get_max_salary(path: str) -> int:
 
 
 def get_min_salary(path: str) -> int:
+    file = read(path)
+    salary_min = 0
+    for job in file:
+        if job['min_salary'].isdigit():
+            if int(job['min_salary']) < salary_min:
+                salary_min = int(job['min_salary'])
+
+    return salary_min
     """Get the minimum salary of all jobs
 
     Must call `read`
