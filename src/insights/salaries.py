@@ -25,18 +25,24 @@ def get_min_salary(path: str) -> int:
 
 
 def matches_salary_range(job: Dict, salary: Union[int, str]) -> bool:
-    salary_min = (
-        int(job['min_salary'])
-        if type(job['min_salary'] == int) and job['min_salary'] >= 0
-        else float('-inf')
-        )
-    salary_max = (
-        int(job['max_salary'] >= 0)
-        if type(job['max_salary'] == int) and job['max_salary'] >= 0
-        else float('inf')
-        )
-    salary_range = salary_min <= int(salary) <= salary_max
-    return salary_range
+    if not isinstance(salary, (int, str)):
+        raise TypeError('Salary precisa ser um número inteiro')
+
+    mins = min_salary = job.get('min_salary')
+    maxs = max_salary = job.get('max_salary')
+
+    if not all(
+        isinstance(s, (int, str)) and s.isdigit() for s in [mins, maxs]
+    ):
+        raise ValueError('Invalid job data')
+
+    if int(min_salary or 0) > int(max_salary or 0):
+        raise ValueError('Invalid job data')
+
+    if int(salary) < int(mins or 0) or int(salary) > int(maxs or 0):
+        return False
+
+    return True
 
 
 def filter_by_salary_range(
