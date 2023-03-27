@@ -25,24 +25,25 @@ def get_min_salary(path: str) -> int:
 
 
 def matches_salary_range(job: Dict, salary: Union[int, str]) -> bool:
-    if not isinstance(salary, (int, str)):
-        raise TypeError('Salary precisa ser um número inteiro')
+    if "max_salary" not in job or "min_salary" not in job:
+        raise ValueError(
+            'A "max_salary" and "min_salary"'
+            'key must be provided in job dictionary.')
 
-    mins = min_salary = job.get('min_salary')
-    maxs = max_salary = job.get('max_salary')
+    try:
+        int(job['min_salary'])
+        int(job['max_salary'])
+        int(salary)
 
-    if not all(
-        isinstance(s, (int, str)) and s.isdigit() for s in [mins, maxs]
-    ):
-        raise ValueError('Invalid job data')
+    except TypeError:
+        raise ValueError(
+            'min_salary, max_salary and salary must be an integer')
 
-    if int(min_salary or 0) > int(max_salary or 0):
-        raise ValueError('Invalid job data')
+    if int(job['min_salary']) > int(job['max_salary']):
+        raise ValueError(
+            'Minimum value cannot be greater than the maximum value')
 
-    if int(salary) < int(mins or 0) or int(salary) > int(maxs or 0):
-        return False
-
-    return True
+    return int(job["min_salary"]) <= int(salary) < int(job["max_salary"])
 
 
 def filter_by_salary_range(
